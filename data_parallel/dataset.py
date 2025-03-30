@@ -34,7 +34,7 @@ class DataPartitioner():
         indices = list(range(len(self.data)))
         rng.shuffle(indices)
         for size in sizes:
-            self.partitions.append(indices[:size])
+            self.partitions.append(indices[:int(size * len(self.data))])
             indices = indices[size:]
         # END SOLUTION
 
