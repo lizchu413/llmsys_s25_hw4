@@ -34,8 +34,9 @@ class DataPartitioner():
         indices = list(range(len(self.data)))
         rng.shuffle(indices)
         for size in sizes:
-            self.partitions.append(indices[:int(size * len(self.data))])
-            indices = indices[size:]
+            split_idx = int(size * len(self.data))
+            self.partitions.append(indices[:split_idx])
+            indices = indices[split_idx:]
         # END SOLUTION
 
     def use(self, partition):
