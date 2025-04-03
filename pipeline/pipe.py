@@ -85,21 +85,23 @@ class Pipe(nn.Module):
         devices = self.devices
 
         # BEGIN SOLUTION
-        from functools import partial
-        input_queues, output_queues = create_workers(devices)
+        inp_queues, out_queues = create_workers(self.devices)
+
         for batch_id, device_id in schedule:
             device = devices[device_id]
-            module = partitions[device_id].to(device)
-            input_tensor = batches[batch_id].to(device)
+            partition = partitions[device_id].to(device)
+            micro_batch = batches[batch_id].to(device)
 
-            task = Task(partial(module, input_tensor))
-            input_queues[device_id].put(task)
+            task = Task(lambda module=partition, x=micro_batch: module(x))
+            inp_queues[device_id].put(task)
 
         for batch_id, device_id in schedule:
-            result = (False, None)
-            while result[1] is None:
-                result = output_queues[device_id].get()
+            result = None
+            while result is None:
+                while result is None:
+                    done, output = out_queues[device_id].get()
+                    if done: result = output
 
-            batches[batch_id] = result[1]
+            batches[batch_id] = result[1].to(batches[batch_id].device)
         # END SOLUTION
 
