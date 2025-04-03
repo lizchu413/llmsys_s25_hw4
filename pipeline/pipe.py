@@ -86,8 +86,6 @@ class Pipe(nn.Module):
         3. Use the in_queues and out_queues to send and receive tasks.
         4. Store the result back to the batches.
         '''
-        partitions = self.partitions
-        devices = self.devices
 
         # BEGIN SOLUTION
         for batch_id, device_id in schedule:
@@ -102,8 +100,5 @@ class Pipe(nn.Module):
             if success:
                 task, output = result
                 batches[batch_id] = output
-            # else:
-            #     exc_info = result
-            #     raise exc_info[1].with_traceback(exc_info[2])
         # END SOLUTION
 
