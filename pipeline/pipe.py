@@ -90,7 +90,7 @@ class Pipe(nn.Module):
             micro_batch = batches[batch_id].to(device)
 
             task = Task(
-                    partial(
+                    functools.partial(
                         partitions[device_id].to(devices[device_id]),
                         batches[batch_id].to(devices[device_id])
                     )
