@@ -90,8 +90,8 @@ class Pipe(nn.Module):
             micro_batch = batches[batch_id].to(device)
 
             task = Task(lambda: partition(micro_batch),
-                        partition_idx=device_id,
-                        microbatch_idx=batch_id)
+                        device_id,
+                        batch_id)
             inp_queues[device_id].put(task)
 
         for batch_id, device_id in schedule:
