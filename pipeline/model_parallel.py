@@ -42,9 +42,7 @@ class GPT2ModelParallel(GPT2ModelCustom):
 
         # BEGIN SOLUTION
         self.pipeline_parallel = True
-        wrapped_blocks = [
-            nn.Sequential(layer, ExtractFirstItem()) for layer in self.h
-        ]
+        wrapped_blocks = [nn.Sequential(layer, ExtractFirstItem()) for layer in self.h]
         pipe = Pipe(nn.Sequential(*wrapped_blocks), split_size=split_size)
         # END SOLUTION
         self.h_pp = pipe
