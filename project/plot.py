@@ -41,8 +41,13 @@ if __name__ == '__main__':
         'ddp_vs_rn_tp.png',
          time=False)
 
-    # pp_mean, pp_std = None, None
-    # mp_mean, mp_std = None, None
+
+    # numbers for 2.3
+    # MODEL PARALLEL
+    # Training time: avg:15.72153913974762, std:0.11819922924041748
+    # tokens_per_second: avg: 40710.78360959045, std:306.0758365738657
+    pp_mean, pp_std = 40710.78360959045, 306.0758365738657
+    mp_mean, mp_std = 15.72153913974762, 0.11819922924041748
     # plot([pp_mean, mp_mean],
     #     [pp_std, mp_std],
     #     ['Pipeline Parallel', 'Model Parallel'],

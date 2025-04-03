@@ -42,6 +42,7 @@ def run_pp(
     config.save_pretrained(workdir)
 
     device_count = torch.cuda.device_count()
+    print(f"device count: {device_count}")
     first_device = "cuda:0" if device_count > 0 else "cpu"
 
 
