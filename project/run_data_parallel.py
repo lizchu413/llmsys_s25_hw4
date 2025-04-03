@@ -129,38 +129,38 @@ def run_dp(
             total_time.append(training_time)
             total_tokens_per_sec.append(avg_tokens_per_sec)
 
-            validation_loss = evaluate_loss(
-                model=model,
-                examples=val_loader,
-                batch_size=batch_size,
-                collate_fn=collate_fn,
-                desc=desc)
-
-            print(f'Epoch {epoch_idx} on Rank {rank}: Validation Loss = {validation_loss}')
-
-            gen_sents = generate(
-                model=model,
-                examples=dataset['test'],
-                src_key=src_key,
-                tgt_key=tgt_key,
-                tokenizer=tokenizer,
-                model_max_length=model_max_length,
-                device=rank,
-                desc=desc)
-
-            gen_examples = []
-            for example, gen_sent in zip(dataset['test'], gen_sents):
-                gen_examples.append({'example': example, 'gen': gen_sent})
-            json.dump(gen_examples, open(
-                f'{workdir}/rank{rank}_gen_epoch{epoch_idx}.json', 'w'), indent=4)
-
-            eval_scores = evaluate_bleu(
-                examples=dataset['test'], gen_sents=gen_sents, tgt_key=tgt_key)
-            print(f'Epoch {epoch_idx} on Rank {rank}: {eval_scores}')
-
-            json.dump(
-                {'validation_loss': validation_loss, **eval_scores, 'training_time': training_time, 'tokens_per_sec': avg_tokens_per_sec},
-                open(f'{workdir}/rank{rank}_results_epoch{epoch_idx}.json', 'w'))
+            # validation_loss = evaluate_loss(
+            #     model=model,
+            #     examples=val_loader,
+            #     batch_size=batch_size,
+            #     collate_fn=collate_fn,
+            #     desc=desc)
+            #
+            # print(f'Epoch {epoch_idx} on Rank {rank}: Validation Loss = {validation_loss}')
+            #
+            # gen_sents = generate(
+            #     model=model,
+            #     examples=dataset['test'],
+            #     src_key=src_key,
+            #     tgt_key=tgt_key,
+            #     tokenizer=tokenizer,
+            #     model_max_length=model_max_length,
+            #     device=rank,
+            #     desc=desc)
+            #
+            # gen_examples = []
+            # for example, gen_sent in zip(dataset['test'], gen_sents):
+            #     gen_examples.append({'example': example, 'gen': gen_sent})
+            # json.dump(gen_examples, open(
+            #     f'{workdir}/rank{rank}_gen_epoch{epoch_idx}.json', 'w'), indent=4)
+            #
+            # eval_scores = evaluate_bleu(
+            #     examples=dataset['test'], gen_sents=gen_sents, tgt_key=tgt_key)
+            # print(f'Epoch {epoch_idx} on Rank {rank}: {eval_scores}')
+            #
+            # json.dump(
+            #     {'validation_loss': validation_loss, **eval_scores, 'training_time': training_time, 'tokens_per_sec': avg_tokens_per_sec},
+            #     open(f'{workdir}/rank{rank}_results_epoch{epoch_idx}.json', 'w'))
         else:
             save_grad_weights(model, rank)
             break

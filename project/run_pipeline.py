@@ -115,13 +115,12 @@ def run_pp(
             total_time.append(training_time)
             total_tokens_per_sec.append(avg_tokens_per_sec)
 
-            # validation_loss = evaluate_loss(
-            #     model=model,
-            #     examples=val_loader,
-            #     batch_size=batch_size,
-            #     collate_fn=collate_fn,
-            #     desc=desc)
-            validation_loss = 0
+            validation_loss = evaluate_loss(
+                model=model,
+                examples=val_loader,
+                batch_size=batch_size,
+                collate_fn=collate_fn,
+                desc=desc)
 
             print(f'Epoch {epoch_idx}: Validation Loss = {validation_loss}')
 
