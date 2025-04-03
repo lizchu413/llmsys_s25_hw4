@@ -46,9 +46,18 @@ if __name__ == '__main__':
     # MODEL PARALLEL
     # Training time: avg:15.72153913974762, std:0.11819922924041748
     # tokens_per_second: avg: 40710.78360959045, std:306.0758365738657
-    pp_mean, pp_std = 40710.78360959045, 306.0758365738657
     mp_mean, mp_std = 15.72153913974762, 0.11819922924041748
-    # plot([pp_mean, mp_mean],
-    #     [pp_std, mp_std],
-    #     ['Pipeline Parallel', 'Model Parallel'],
-    #     'pp_vs_mp.png')
+    pp_mean, pp_std = 0, 0
+    mp_mean_tp, mp_std_tp = 40710.78360959045, 306.0758365738657
+    pp_mean_tp, pp_std_tp = 0, 0
+    plot([pp_mean, mp_mean],
+        [pp_std, mp_std],
+        ['Pipeline Parallel', 'Model Parallel'],
+        'pp_vs_mp_time.png')
+
+
+    plot([pp_mean_tp, mp_mean_tp],
+         [pp_std_tp, mp_std_tp],
+         ['Pipeline Parallel', 'Model Parallel'],
+         'pp_vs_mp_tp.png',
+         time=False)
