@@ -100,7 +100,6 @@ class Pipe(nn.Module):
             while result[1] is None:
                 result = output_queues[device_id].get()
 
-            _, output = result[1]
-            batches[batch_id] = output
+            batches[batch_id] = result[1]
         # END SOLUTION
 
