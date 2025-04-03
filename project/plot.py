@@ -44,12 +44,16 @@ if __name__ == '__main__':
 
     # numbers for 2.3
     # MODEL PARALLEL
-    # Training time: avg:15.72153913974762, std:0.11819922924041748
-    # tokens_per_second: avg: 40710.78360959045, std:306.0758365738657
-    mp_mean, mp_std = 15.72153913974762, 0.11819922924041748
-    pp_mean, pp_std = 0, 0
-    mp_mean_tp, mp_std_tp = 40710.78360959045, 306.0758365738657
-    pp_mean_tp, pp_std_tp = 0, 0
+    # Training time: avg:52.60557687282562, std:0.1252959966659546,
+    # tokens_per_second: avg: 12166.079506576945, std:28.97717595567792
+
+    # PIPELINE PARALLEL
+    # Training time: avg:52.573574900627136, std:0.14517104625701904,
+    # tokens_per_second: avg: 12173.508860297825, std:33.61462524108174
+    mp_mean, mp_std = 52.60557687282562, 0.1252959966659546
+    pp_mean, pp_std = 52.573574900627136, 0.14517104625701904
+    mp_mean_tp, mp_std_tp = 12166.079506576945, 28.97717595567792
+    pp_mean_tp, pp_std_tp = 12173.508860297825, 33.61462524108174
     plot([pp_mean, mp_mean],
         [pp_std, mp_std],
         ['Pipeline Parallel', 'Model Parallel'],
