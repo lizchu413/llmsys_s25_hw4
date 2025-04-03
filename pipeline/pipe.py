@@ -90,41 +90,20 @@ class Pipe(nn.Module):
         devices = self.devices
 
         # BEGIN SOLUTION
-        # inp_queues, out_queues = create_workers(self.devices)
-        #
-        # for batch_id, device_id in schedule:
-        #     device = devices[device_id]
-        #     partition = partitions[device_id].to(device)
-        #     micro_batch = batches[batch_id].to(device)
-        #
-        #     task = Task(lambda module=partition, x=micro_batch: module(x))
-        #     inp_queues[device_id].put(task)
-        #
-        # for batch_id, device_id in schedule:
-        #     result = None
-        #     while result is None:
-        #         done, output = out_queues[device_id].get()
-        #         if done: result = output
-        #
-        #     batches[batch_id] = result[1].to(batches[batch_id].device)
-        for microbatch_idx, partition_idx in schedule:
-            partition = self.partitions[partition_idx]
-            device = self.devices[partition_idx]
-
-            # Ensure input batch is moved to correct device before sending
-            input_batch = batches[microbatch_idx].to(device)
-
-            # Wrap the computation in a device-correct lambda
+        for batch_id, device_id in schedule:
+            partition = self.partitions[device_id]
+            device = self.devices[device_id]
+            input_batch = batches[batch_id].to(device)
             task = Task(lambda module=partition, x=input_batch: module(x))
-            self.in_queues[partition_idx].put(task)
+            self.in_queues[device_id].put(task)
 
-        for microbatch_idx, partition_idx in schedule:
-            success, result = self.out_queues[partition_idx].get()
+        for batch_id, device_id in schedule:
+            success, result = self.out_queues[device_id].get()
             if success:
                 task, output = result
-                batches[microbatch_idx] = output
-            else:
-                exc_info = result  # <-- result is (exc_type, exc_val, tb)
-                raise exc_info[1].with_traceback(exc_info[2])
+                batches[batch_id] = output
+            # else:
+            #     exc_info = result
+            #     raise exc_info[1].with_traceback(exc_info[2])
         # END SOLUTION
 
