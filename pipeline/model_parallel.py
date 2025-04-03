@@ -42,15 +42,10 @@ class GPT2ModelParallel(GPT2ModelCustom):
 
         # BEGIN SOLUTION
         self.pipeline_parallel = True
-        def wrap_block(block):
-            device = _retrieve_device(block)
-            return [
-                WithDevice(block, device),
-                WithDevice(ExtractFirstItem(), device)
-            ]
-
-        pipeline_layers = [layer for block in self.h for layer in wrap_block(block)]
-        pipe = Pipe(nn.Sequential(*pipeline_layers), split_size=split_size)
+        wrapped_blocks = [
+            nn.Sequential(layer, ExtractFirstItem()) for layer in self.h
+        ]
+        pipe = Pipe(nn.Sequential(*wrapped_blocks), split_size=split_size)
         # END SOLUTION
         self.h_pp = pipe
 

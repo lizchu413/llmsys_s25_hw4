@@ -83,10 +83,7 @@ class Pipe(nn.Module):
 
         # BEGIN SOLUTION
         from functools import partial
-        # Initialize input and output queues for each device
         input_queues, output_queues = create_workers(devices)
-
-        # Dispatch tasks to the appropriate input queues
         for batch_id, device_id in schedule:
             device = devices[device_id]
             module = partitions[device_id].to(device)
@@ -95,7 +92,6 @@ class Pipe(nn.Module):
             task = Task(partial(module, input_tensor))
             input_queues[device_id].put(task)
 
-        # Retrieve results from the output queues
         for batch_id, device_id in schedule:
             result = (False, None)
             while result[1] is None:
