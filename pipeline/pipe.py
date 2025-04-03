@@ -94,7 +94,7 @@ class Pipe(nn.Module):
 
         for batch_id, device_id in schedule:
             result = None
-            while result == None:
+            while result is None:
                 done, output = out_queues[device_id].get()
                 if done: result = output
 

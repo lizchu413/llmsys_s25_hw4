@@ -124,29 +124,29 @@ def run_pp(
 
             print(f'Epoch {epoch_idx}: Validation Loss = {validation_loss}')
 
-            # gen_sents = generate(
-            #     model=model,
-            #     examples=dataset['test'],
-            #     src_key=src_key,
-            #     tgt_key=tgt_key,
-            #     tokenizer=tokenizer,
-            #     model_max_length=model_max_length,
-            #     device=first_device,
-            #     desc=desc)
-            #
-            # gen_examples = []
-            # for example, gen_sent in zip(dataset['test'], gen_sents):
-            #     gen_examples.append({'example': example, 'gen': gen_sent})
-            # json.dump(gen_examples, open(
-            #     f'{workdir}/gen_epoch{epoch_idx}.json', 'w'), indent=4)
-            #
-            # eval_scores = evaluate_bleu(
-            #     examples=dataset['test'], gen_sents=gen_sents, tgt_key=tgt_key)
-            # print(f'Epoch {epoch_idx}: {eval_scores}')
-            #
-            # json.dump(
-            #     {'validation_loss': validation_loss, **eval_scores},
-            #     open(f'{workdir}/eval_results_epoch{epoch_idx}.json', 'w'))
+            gen_sents = generate(
+                model=model,
+                examples=dataset['test'],
+                src_key=src_key,
+                tgt_key=tgt_key,
+                tokenizer=tokenizer,
+                model_max_length=model_max_length,
+                device=first_device,
+                desc=desc)
+
+            gen_examples = []
+            for example, gen_sent in zip(dataset['test'], gen_sents):
+                gen_examples.append({'example': example, 'gen': gen_sent})
+            json.dump(gen_examples, open(
+                f'{workdir}/gen_epoch{epoch_idx}.json', 'w'), indent=4)
+
+            eval_scores = evaluate_bleu(
+                examples=dataset['test'], gen_sents=gen_sents, tgt_key=tgt_key)
+            print(f'Epoch {epoch_idx}: {eval_scores}')
+
+            json.dump(
+                {'validation_loss': validation_loss, **eval_scores},
+                open(f'{workdir}/eval_results_epoch{epoch_idx}.json', 'w'))
         else:
             break
     if not PYTEST:
