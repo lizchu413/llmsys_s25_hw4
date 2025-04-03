@@ -61,7 +61,7 @@ def _split_module(modules: nn.Sequential) -> Tuple[List[nn.Sequential], List[tor
         # BEGIN SOLUTION
         device = module.device if isinstance(module, WithDevice) else _retrieve_device(module)
         if device != current_device:
-            if current_device is not None:
+            if current_device != None:
                 devices.append(current_device)
                 partitions.append(_assemble_partition(current_partition))
                 current_partition = []
