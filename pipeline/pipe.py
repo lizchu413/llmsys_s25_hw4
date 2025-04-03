@@ -85,11 +85,11 @@ class Pipe(nn.Module):
         inp_queues, out_queues = create_workers(self.devices)
 
         for batch_id, device_id in schedule:
-            device = self.devices[device_id]
-            partition = self.partitions[device_id].to(device)
+            device = devices[device_id]
+            partition = partitions[device_id].to(device)
             micro_batch = batches[batch_id].to(device)
 
-            task = Task(lambda module=partition, x=batches[batch_id].to(device): module(x))
+            task = Task(lambda module=partition, x=micro_batch: module(x))
             inp_queues[device_id].put(task)
 
         for batch_id, device_id in schedule:
@@ -98,6 +98,6 @@ class Pipe(nn.Module):
                 done, output = out_queues[device_id].get()
                 if done: result = output
 
-            batches[batch_id] = result[1].to(batches[device_id].device)
+            batches[batch_id] = result[1].to(batches[batch_id].device)
         # END SOLUTION
 
