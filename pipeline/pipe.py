@@ -89,9 +89,12 @@ class Pipe(nn.Module):
             partition = self.partitions[device_id].to(device)
             micro_batch = batches[batch_id].to(device)
 
-            task = Task(lambda: partition(micro_batch),
-                        device_id,
-                        batch_id)
+            task = Task(
+                    partial(
+                        partitions[device_id].to(devices[device_id]),
+                        batches[batch_id].to(devices[device_id])
+                    )
+                )
             inp_queues[device_id].put(task)
 
         for batch_id, device_id in schedule:
